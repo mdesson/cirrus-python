@@ -91,3 +91,4 @@ ENV/
 # Local Files
 /todo.txt
 .idea
+/soup.txt
