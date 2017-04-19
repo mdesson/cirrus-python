@@ -1,0 +1,23 @@
+OTHER
+TODO: Add required packages to setup.py
+TODO: Keep Setup.py updated
+TODO: Write tests
+
+TEXTING
+TODO: Write script to send msgs via twilio
+TODO: Write script that schedules texts
+HELP: https://www.fullstackpython.com/blog/send-sms-text-messages-python.html
+
+WEATHER
+TODO: Learn Selenium
+TODO: Scrape relevant data
+TODO: output that data as string
+TODO: Write classes to store weather data (dynamically generate weather data point)
+
+Weekday Class: (easier to read in crhome. This class contains dates, weather, etc. in column
+<div class="weather-panel weekday"><div class="date_container"><div class="day_name">Wed</div><div class="month">Apr</div><div class="day">19</div></div><img src="//s2.twnmm.com/images/en_ca/icons/wxicons_small/30.png"><div class="extended_data">13<span class="">°C</span></div><div class="extended_data low_temp">6<span class="">°C</span></div><div class="extended_data"><span>90%</span></div><div class="extended_data"><span>~10 mm</span></div><div class="extended_data day_pop_marg"><span>-</span></div></div>
+
+Current Weather Class: (big current weather section at top)
+<div class="current-weather clearfix">	<!--googleoff: all-->
+<div class="temperature-area clearfix"><p class="condition">Clear</p><div class="weather-icon"><img src="//s1.twnmm.com/images/en_ca/icons/wxicons_large/18.png" alt="Clear"></div><div class="mainTemp-wrap"><p class="temperature">8<span>°C</span></p><p class="mcity-feels-like">Feels like <span>8</span></p></div></div>
+<!--googleon: all-->	<div class="carousel-container clearfix">	<div class="weather-forecast clearfix ">	<div class="bx-wrapper" style="width:330px; position:relative;"><div class="bx-window" style="position:relative; overflow:hidden; width:330px;"><div class="forecast-carousel carousel" id="weather-forecast" style="width: 999999px; position: relative; left: 0px;"><div class="forecastitems bx-child" style="width: 109px; float: left; list-style: none;"><div class="inner"><div class="stage">Tue Overnight</div><p class="condition">Partly cloudy</p><img src="//s2.twnmm.com/images/en_ca/icons/wxicons_small/20.png" alt="Partly cloudy"><p class="temperature">3<span>°C</span></p><p class="feels-like">Feels like <span>0</span></p></div></div><div class="forecastitems bx-child" style="width: 109px; float: left; list-style: none;"><div class="inner"><div class="stage">Wed Morning</div><p class="condition">A mix of sun and clouds</p><img src="//s2.twnmm.com/images/en_ca/icons/wxicons_small/3.png" alt="A mix of sun and clouds"><p class="temperature">7<span>°C</span></p><p class="feels-like">Feels like <span>3</span></p></div></div><div class="forecastitems bx-child" style="width: 109px; float: left; list-style: none;"><div class="inner"><div class="stage">Wed Afternoon</div><p class="condition">Rain</p><img src="//s2.twnmm.com/images/en_ca/icons/wxicons_small/29.png" alt="Rain"><p class="temperature">13<span>°C</span></p><p class="feels-like">Feels like <span>10</span></p></div></div><div class="forecastitems bx-child" style="width: 109px; float: left; list-style: none;"><div class="inner"><div class="stage">Wed Evening</div><p class="condition">Light rain</p><img src="//s2.twnmm.com/images/en_ca/icons/wxicons_small/28.png" alt="Light rain"><p class="temperature">9<span>°C</span></p><p class="feels-like">Feels like <span>6</span></p></div></div><div class="forecastitems bx-child" style="width: 109px; float: left; list-style: none;"><div class="inner"><div class="stage">Wed Overnight</div><p class="condition">Cloudy with showers</p><img src="//s2.twnmm.com/images/en_ca/icons/wxicons_small/28.png" alt="Cloudy with showers"><p class="temperature">7<span>°C</span></p><p class="feels-like">Feels like <span>4</span></p></div></div><div class="forecastitems bx-child" style="width: 109px; float: left; list-style: none;"><div class="inner"><div class="stage">Thu Morning</div><p class="condition">A mix of sun and clouds</p><img src="//s2.twnmm.com/images/en_ca/icons/wxicons_small/3.png" alt="A mix of sun and clouds"><p class="temperature">6<span>°C</span></p><p class="feels-like">Feels like <span>2</span></p></div></div></div></div><a href="javascript:void(0);" class="bx-prev"><i class="icon-chevron-left"></i></a><a href="javascript:void(0);" class="bx-next"><i class="icon-chevron-right"></i></a></div>	</div>	</div>	</div>
