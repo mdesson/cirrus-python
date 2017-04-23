@@ -1,0 +1,14 @@
+appdirs==1.4.3
+beautifulsoup4==4.5.3
+html5lib==0.999999999
+lxml==3.7.3
+packaging==16.8
+PyJWT==1.4.2
+pyparsing==2.2.0
+PySocks==1.6.7
+pytz==2017.2
+requests==2.13.0
+selenium==3.3.3
+six==1.10.0
+twilio==6.0.0
+webencodings==0.5.1

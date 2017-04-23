@@ -12,12 +12,18 @@ soup = BeautifulSoup(html, "lxml")
 
 spans = soup.find_all("span", {'class': "wxo-metric-hide"})
 
-values = []
+# values = []
+#
+# for span in spans:
+#     values.append(span.get_text())
+values = [x.get_text() for x in spans]
 
-for span in spans:
-    values.append(span.get_text())
+for value in values:
+        print(value)
 
 print(values)
+print(soup)
+
 # DESIGN #
 # Find !!! in soup.txt. id = "mainContent"
 # For weekly, use text descriptions lower on page
