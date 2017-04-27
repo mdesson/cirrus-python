@@ -37,6 +37,6 @@ print("It is {} outside. The temperature is {} and {}. The wind is {} and humidi
       .format(conditions, temp, tendency, wind, humidity))
 
 # DESIGN #
-# Find !!! in soup.txt. id = "mainContent"
+# Use classes to generate & store weekday information
 # For verbose weekly, use text descriptions lower on page
 # For brief weekly, use chart below current chart
