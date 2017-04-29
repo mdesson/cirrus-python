@@ -11,18 +11,18 @@ soup = BeautifulSoup(html, "lxml")
 
 
 class WeekDay:
-    def __init__(self, date, high, PoP, condition, day, night):
+    def __init__(self, date="TEMP", high="TEMP", PoP="TEMP", condition="TEMP", day="TEMP", night="TEMP"):
         self.date = date
+        self.day = day
+        self.night = night
         self.high = high
         self.PoP = PoP
         self.condition = condition
-        self.day = day
-        self.night = night
-
-    def print_weekday(self, date, high, PoP, condition):
-        print("Placeholder")
 
     def print_verbose(self, day, night):
+        print("Placeholder")
+
+    def print_weekday(self, date, high, PoP, condition):
         print("Placeholder")
 
 
@@ -54,30 +54,43 @@ def print_tag_list(existing_weatherlist):
         x +=1
 
 
-def print_current():
-    current_weather = weatherlist("dd", "mrgn-bttm-0")
+def current_weather():
+    current = weatherlist("dd", "mrgn-bttm-0")
 
-    conditions = current_weather[2].lower()
-    tendency = current_weather[5].lower()
-    temp = current_weather[6]
-    wind = current_weather[11]
-    humidity = current_weather[10]
+    conditions = current[2].lower()
+    tendency = current[5].lower()
+    temp = current[6]
+    wind = current[11]
+    humidity = current[10]
 
     print("It is {} outside. The temperature is {} and {}. The wind is {} and humidity is at {}."
           .format(conditions, temp, tendency, wind, humidity))
 
 
 def generate_weekdays():
-    print("Code goes here")
+    raw_dates = weatherlist("td", "uniform_width")
+    raw_days = weatherlist("tr", "pdg-btm-0")
+    raw_nights = weatherlist("tr", "pdg-tp-0")
+    weekdays = []
+
+    for i in raw_dates:
+        if i.strip() != "Night":
+            date = WeekDay(date=i.strip())
+            weekdays.append(date)
+
+    x = 0
+    for i in weekdays:
+        i.day = raw_days[x].replace(i.date, '').strip()
+        i.night = raw_nights[x].replace('Night', '').strip()
+        x += 1
+
     return weekdays
 
-print("DAY inc. DATE:")
-print_tag_list(weatherlist("tr", "pdg-btm-0"))
-print("\nDATE Only:")
-print_tag_list(weatherlist("td", "uniform_width"))
-print("\nNIGHT inc. DATE:")
-print_tag_list(weatherlist("tr", "pdg-tp-0")) # Special case for "Tonight"
-print("\nCURRENT:")
-print_current()
+current_weather()
+
+x = generate_weekdays()
+
+for i in x:
+    print(i.date, ':\n', i.day, '\n', i.night)
 
 # NOTE: For hourly, learn to contend with time rolling over into next day
