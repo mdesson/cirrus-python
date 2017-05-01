@@ -73,24 +73,37 @@ def generate_weekdays():
     raw_nights = weatherlist("tr", "pdg-tp-0")
     weekdays = []
 
+    date = WeekDay(date="Today", night=raw_nights[0].replace('Tonight', '').strip(), day='')
+    del raw_nights[0]
+    weekdays.append(date)
+
+    if "Today" in raw_days[0]:
+        weekdays[0].day = raw_days[0].replace('Today', '').strip()
+        del raw_days[0]
+
     for i in raw_dates:
         if i.strip() != "Night":
             date = WeekDay(date=i.strip())
             weekdays.append(date)
 
     x = 0
-    for i in weekdays:
+    for i in weekdays[1:]:
         i.day = raw_days[x].replace(i.date, '').strip()
-        i.night = raw_nights[x].replace('Night', '').strip()
+        try:
+            i.night = raw_nights[x].replace('Night', '').strip()
+        except:
+            pass
         x += 1
 
     return weekdays
 
 current_weather()
 
-x = generate_weekdays()
+weekdays = generate_weekdays()
 
-for i in x:
+for i in weekdays:
     print(i.date, ':\n', i.day, '\n', i.night)
 
 # NOTE: For hourly, learn to contend with time rolling over into next day
+# BUGS:
+# none :)
