@@ -11,18 +11,21 @@ soup = BeautifulSoup(html, "lxml")
 
 
 class WeekDay:
-    def __init__(self, date="TEMP", high="TEMP", PoP="TEMP", condition="TEMP", day="TEMP", night="TEMP"):
+    def __init__(self, date="TEMP", day="TEMP", night="TEMP", high="TEMP", low="TEMP", PoP_day="TEMP", PoP_night="TEMP", condition_day="TEMP", condition_night = "TEMP"):
         self.date = date
         self.day = day
         self.night = night
         self.high = high
-        self.PoP = PoP
-        self.condition = condition
+        self.low = low
+        self.PoP_day = PoP_day
+        self.PoP_night = PoP_night
+        self.condition_day = condition_day
+        self.condition_night = condition_night
 
     def print_verbose(self, day, night):
         print("Placeholder")
 
-    def print_weekday(self, date, high, PoP, condition):
+    def print_brief(self, date, high, PoP, condition_day):
         print("Placeholder")
 
 
@@ -71,29 +74,83 @@ def generate_weekdays():
     raw_dates = weatherlist("td", "uniform_width")
     raw_days = weatherlist("tr", "pdg-btm-0")
     raw_nights = weatherlist("tr", "pdg-tp-0")
+    raw_brief = weatherlist('p', 'mrgn-bttm-0')
     weekdays = []
 
-    date = WeekDay(date="Today", night=raw_nights[0].replace('Tonight', '').strip(), day='')
+    date = WeekDay(date="Today", night=raw_nights[0].replace('Tonight', '').strip())
     del raw_nights[0]
     weekdays.append(date)
 
+    # Create today weekday object
     if "Today" in raw_days[0]:
         weekdays[0].day = raw_days[0].replace('Today', '').strip()
         del raw_days[0]
 
+    # Add day attribute
     for i in raw_dates:
         if i.strip() != "Night":
             date = WeekDay(date=i.strip())
             weekdays.append(date)
 
+    # Add night attribute
     x = 0
     for i in weekdays[1:]:
         i.day = raw_days[x].replace(i.date, '').strip()
         try:
             i.night = raw_nights[x].replace('Night', '').strip()
         except:
-            pass
+            i.night = ''
         x += 1
+
+    # Get brief weather during daytime
+    if len(raw_brief) == 39:
+        weekdays[0].high = raw_brief[0].strip().split("C",1)[0]+"C"
+        weekdays[0].PoP_day = raw_brief[1].strip()
+        weekdays[0].condition_day = raw_brief[2].strip()
+        weekdays[0].low = raw_brief[21].strip().split("C",1)[0]+"C"
+        weekdays[0].PoP_night = raw_brief[22].strip()
+        weekdays[0].condition_day = raw_brief[23].strip()
+        del raw_brief[0:4]
+        del raw_brief[21:24]
+
+        for i in range(1, 7):
+            weekdays[i].high = raw_brief[0].strip().split("C",1)[0]+"C"
+            del raw_brief[0]
+            weekdays[i].PoP_day = raw_brief[0].strip()
+            del raw_brief[0]
+            weekdays[i].condition_day = raw_brief[0].strip()
+            del raw_brief[0]
+
+        for i in range(1, 6):
+            weekdays[i].low = raw_brief[0].strip().split("C",1)[0]+"C"
+            del raw_brief[0]
+            weekdays[i].PoP_night = raw_brief[0].strip()
+            del raw_brief[0]
+            weekdays[i].condition_night = raw_brief[0].strip()
+            del raw_brief[0]
+
+    # get brief weather during night
+    elif len(raw_brief) == 36:
+        weekdays[0].low = raw_brief[18].strip().split("C",1)[0]+"C"
+        weekdays[0].PoP_night = raw_brief[19].strip()
+        weekdays[0].condition_night = raw_brief[20].strip()
+        del raw_brief[18:21]
+
+        for i in range(1, 7):
+            weekdays[i].high = raw_brief[0].strip().split("C",1)[0]+"C"
+            del raw_brief[0]
+            weekdays[i].PoP_day = raw_brief[0].strip()
+            del raw_brief[0]
+            weekdays[i].condition_day = raw_brief[0].strip()
+            del raw_brief[0]
+
+        for i in range(1, 6):
+            weekdays[i].low = raw_brief[0].strip().split("C",1)[0]+"C"
+            del raw_brief[0]
+            weekdays[i].PoP_night = raw_brief[0].strip()
+            del raw_brief[0]
+            weekdays[i].condition_night = raw_brief[0].strip()
+            del raw_brief[0]
 
     return weekdays
 
@@ -101,8 +158,13 @@ current_weather()
 
 weekdays = generate_weekdays()
 
+print("DAY INFO:")
 for i in weekdays:
-    print(i.date, ':\n', i.day, '\n', i.night)
+    print(i.date, '\n', i.high, '\n', i.PoP_day, '\n', i.condition_day)
+
+print("NIGHT INFO:")
+for i in weekdays:
+    print(i.date, ':\n', i.low, '\n', i.PoP_night, '\n', i.condition_night)
 
 # NOTE: For hourly, learn to contend with time rolling over into next day
 # BUGS:
