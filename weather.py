@@ -5,9 +5,12 @@ headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/
 week_req = request.Request("https://weather.gc.ca/city/pages/qc-147_metric_e.html", headers=headers)
 hour_req = request.Request("https://weather.gc.ca/forecast/hourly/qc-147_metric_e.html", headers=headers)
 
-res = request.urlopen(week_req)
-html = res.read()
-soup = BeautifulSoup(html, "lxml")
+
+def make_soup(url):
+    res = request.urlopen(url)
+    html = res.read()
+    soup = BeautifulSoup(html, "lxml")
+    return soup
 
 
 class WeekDay:
@@ -43,22 +46,22 @@ class Hour:
 
 
 # returns list of elements with given tag and class
-def weatherlist(tag, webclass):
-    search = soup.find_all(tag, {"class": webclass})
+def weatherlist(tag, webclass, url):
+    search = make_soup(url).find_all(tag, {"class": webclass})
     values = [x.get_text().replace('\n','') for x in search]
     return values
 
 
-# For debug purposes to get all element in webclass.
+# For debug purposes to get all element in webclass. ==> REWRITE
 def print_tag_list(existing_weatherlist):
     x = 0
     for i in existing_weatherlist:
         print(str(x) + ' ' + i)
-        x +=1
+        x += 1
 
 
 def current_weather():
-    current = weatherlist("dd", "mrgn-bttm-0")
+    current = weatherlist("dd", "mrgn-bttm-0", week_req)
 
     conditions = current[2].lower()
     tendency = current[5].lower()
@@ -71,10 +74,10 @@ def current_weather():
 
 
 def generate_weekdays():
-    raw_dates = weatherlist("td", "uniform_width")
-    raw_days = weatherlist("tr", "pdg-btm-0")
-    raw_nights = weatherlist("tr", "pdg-tp-0")
-    raw_brief = weatherlist('p', 'mrgn-bttm-0')
+    raw_dates = weatherlist("td", "uniform_width", week_req)
+    raw_days = weatherlist("tr", "pdg-btm-0", week_req)
+    raw_nights = weatherlist("tr", "pdg-tp-0", week_req)
+    raw_brief = weatherlist('p', 'mrgn-bttm-0', week_req)
     weekdays = []
 
     date = WeekDay(date="Today", night=raw_nights[0].replace('Tonight', '').strip())
@@ -153,6 +156,11 @@ def generate_weekdays():
             del raw_brief[0]
 
     return weekdays
+
+
+def generate_hours():
+    pass
+
 
 current_weather()
 

@@ -93,3 +93,5 @@ ENV/
 .idea
 /soup.txt
 /ignore/
+/cirrus/
+cirrus/
