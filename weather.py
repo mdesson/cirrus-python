@@ -112,8 +112,8 @@ def generate_weekdays():
         weekdays[0].condition_day = raw_brief[2].strip()
         weekdays[0].low = raw_brief[21].strip().split("C",1)[0]+"C"
         weekdays[0].PoP_night = raw_brief[22].strip()
-        weekdays[0].condition_day = raw_brief[23].strip()
-        del raw_brief[0:4]
+        weekdays[0].condition_night = raw_brief[23].strip()
+        del raw_brief[0:3]
         del raw_brief[21:24]
 
         for i in range(1, 7):
