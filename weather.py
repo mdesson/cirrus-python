@@ -14,7 +14,7 @@ def make_soup(url):
 
 
 class WeekDay:
-    def __init__(self, date="TEMP", day="TEMP", night="TEMP", high="TEMP", low="TEMP", PoP_day="TEMP", PoP_night="TEMP", condition_day="TEMP", condition_night = "TEMP"):
+    def __init__(self, date="TEMP", day="TEMP", night="TEMP", high="TEMP", low="TEMP", PoP_day="TEMP", PoP_night="TEMP", condition_day="TEMP", condition_night="TEMP"):
         self.date = date
         self.day = day
         self.night = night
@@ -33,21 +33,27 @@ class WeekDay:
 
 
 class Hour:
-    def __init__(self, time, temp, condition, LoP, wind, humidex):
+    def __init__(self, time="TEMP", temp="TEMP", condition="TEMP", LoP="TEMP", wind="TEMP", gust="TEMP"):
         self.time = time
         self.temp = temp
         self.condition = condition
         self.LoP = LoP
         self.wind = wind
-        self.humidex = humidex
+        self.gust = gust
 
-    def print_hour(self, time, temp, condition, LoP, wind, humidex):
+    def print_hour(self, time, temp, condition, LoP, wind, gust):
         print("Placeholder")
 
 
 # returns list of elements with given tag and class
-def weatherlist(tag, webclass, url):
+def class_weatherlist(tag, webclass, url):
     search = make_soup(url).find_all(tag, {"class": webclass})
+    values = [x.get_text().replace('\n','') for x in search]
+    return values
+
+
+def header_weatherlist(tag, header, url):
+    search = make_soup(url).find_all(tag, {"headers": header})
     values = [x.get_text().replace('\n','') for x in search]
     return values
 
@@ -61,7 +67,7 @@ def print_tag_list(existing_weatherlist):
 
 
 def current_weather():
-    current = weatherlist("dd", "mrgn-bttm-0", week_req)
+    current = class_weatherlist("dd", "mrgn-bttm-0", week_req)
 
     conditions = current[2].lower()
     tendency = current[5].lower()
@@ -74,10 +80,10 @@ def current_weather():
 
 
 def generate_weekdays():
-    raw_dates = weatherlist("td", "uniform_width", week_req)
-    raw_days = weatherlist("tr", "pdg-btm-0", week_req)
-    raw_nights = weatherlist("tr", "pdg-tp-0", week_req)
-    raw_brief = weatherlist('p', 'mrgn-bttm-0', week_req)
+    raw_dates = class_weatherlist("td", "uniform_width", week_req)
+    raw_days = class_weatherlist("tr", "pdg-btm-0", week_req)
+    raw_nights = class_weatherlist("tr", "pdg-tp-0", week_req)
+    raw_brief = class_weatherlist('p', 'mrgn-bttm-0', week_req)
     weekdays = []
 
     date = WeekDay(date="Today", night=raw_nights[0].replace('Tonight', '').strip())
@@ -159,21 +165,29 @@ def generate_weekdays():
 
 
 def generate_hours():
-    pass
+    raw_times = header_weatherlist("td", "header1", hour_req)
+    raw_temps = header_weatherlist("td", "header2", hour_req)
+    raw_conds = header_weatherlist("td", "header3", hour_req)
+    raw_LoP = header_weatherlist("td", "header4", hour_req)
+    raw_wind = []
+    raw_gust = []
+    hours_list = []
 
+    for i in header_weatherlist("td", "header5", hour_req): # .split() it to get individual stuff
+        x = i.split()
+        raw_wind.append(x[1])
+        try:
+            raw_gust.append(x[3])
+        except IndexError:
+            raw_gust.append("")
 
-current_weather()
+    counter = 0
+    for i in raw_times:
+        hours_list.append(Hour(time=raw_times[counter], temp=raw_temps[counter], condition=raw_conds[counter],
+                               LoP=raw_LoP[counter], wind=raw_wind[counter], gust=raw_gust[counter]))
+        counter += 1
 
-weekdays = generate_weekdays()
+    return hours_list
 
-print("DAY INFO:")
-for i in weekdays:
-    print(i.date, '\n', i.high, '\n', i.PoP_day, '\n', i.condition_day)
-
-print("NIGHT INFO:")
-for i in weekdays:
-    print(i.date, ':\n', i.low, '\n', i.PoP_night, '\n', i.condition_night)
-
-# NOTE: For hourly, learn to contend with time rolling over into next day
 # BUGS:
 # none :)
