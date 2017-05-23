@@ -25,11 +25,33 @@ class WeekDay:
         self.condition_day = condition_day
         self.condition_night = condition_night
 
-    def print_verbose(self, day, night):
-        print("Placeholder")
+    def print_verbose(self, date, day, night):
+        print(date.upper())
+        if day != "TEMP" and night != "":
+            print("Day: {}".format(day))
+            print("Night: {}".format(night))
+        elif day != "TEMP":
+            print("Day: {}".format(day))
+        elif night != "":
+            print("Night: {}".format(night))
+        else:
+            print("Error! No weather data for given date.")
 
-    def print_brief(self, date, high, PoP, condition_day):
-        print("Placeholder")
+    def print_brief(self, date, high, low, PoP_day, PoP_night, condition_day, condition_night):
+        print(date.upper())
+
+        if high != "TEMP":
+            print("{} high".format(high))
+        if low != "TEMP":
+            print("{} low".format(low))
+        if condition_day != "TEMP":
+            print("Day: {}".format(condition_day))
+        if PoP_day != "" and PoP_day != "TEMP":
+            print("{} chance of precipitation".format(PoP_day))
+        if condition_night != "TEMP":
+            print("Night: {}".format(condition_night))
+        if PoP_night != "" and PoP_night != "TEMP":
+            print("{} chance of precipitation")
 
 
 class Hour:
@@ -189,5 +211,13 @@ def generate_hours():
 
     return hours_list
 
+weekdays = generate_weekdays()
+for i in weekdays:
+    i.print_verbose(i.date, i.day, i.night)
+    print("")
+
+for i in weekdays:
+    i.print_brief(i.date, i.high, i.low, i.PoP_day, i.PoP_night, i.condition_day, i.condition_night)
+    print("")
 # BUGS:
 # none :)
