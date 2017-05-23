@@ -6,13 +6,6 @@ week_req = request.Request("https://weather.gc.ca/city/pages/qc-147_metric_e.htm
 hour_req = request.Request("https://weather.gc.ca/forecast/hourly/qc-147_metric_e.html", headers=headers)
 
 
-def make_soup(url):
-    res = request.urlopen(url)
-    html = res.read()
-    soup = BeautifulSoup(html, "lxml")
-    return soup
-
-
 class WeekDay:
     def __init__(self, date="TEMP", day="TEMP", night="TEMP", high="TEMP", low="TEMP", PoP_day="TEMP", PoP_night="TEMP", condition_day="TEMP", condition_night="TEMP"):
         self.date = date
@@ -63,8 +56,20 @@ class Hour:
         self.wind = wind
         self.gust = gust
 
-    def print_hour(self, time, temp, condition, LoP, wind, gust):
-        print("Placeholder")
+    def print_hour(self, time, temp, LoP, condition, wind, gust):
+        if gust != "":
+            print("{}: {}°C. {}. {} chance of precipitation. Wind at {} km/h, with gusts of {} km/h."
+                  .format(time, temp, LoP, condition, wind, gust))
+        else:
+            print("{}: {}°C. {}. {} chance of precipitation. Wind at {} km/h."
+                  .format(time, temp, LoP, condition, wind))
+
+
+def make_soup(url):
+    res = request.urlopen(url)
+    html = res.read()
+    soup = BeautifulSoup(html, "lxml")
+    return soup
 
 
 # returns list of elements with given tag and class
@@ -203,6 +208,10 @@ def generate_hours():
         except IndexError:
             raw_gust.append("")
 
+    for i in raw_LoP:
+        if i == 'Nil':
+            i.replace("Nil", "No")
+
     counter = 0
     for i in raw_times:
         hours_list.append(Hour(time=raw_times[counter], temp=raw_temps[counter], condition=raw_conds[counter],
@@ -212,12 +221,26 @@ def generate_hours():
     return hours_list
 
 weekdays = generate_weekdays()
-for i in weekdays:
-    i.print_verbose(i.date, i.day, i.night)
-    print("")
+hours = generate_hours()
 
-for i in weekdays:
-    i.print_brief(i.date, i.high, i.low, i.PoP_day, i.PoP_night, i.condition_day, i.condition_night)
-    print("")
+if __name__ == "__main__":
+    print("CURRENT WEATHER")
+    current_weather()
+
+    print("\nHOURLY REPORT")
+    for i in hours:
+        i.print_hour(i.time, i.temp, i.condition, i.LoP, i.wind, i.gust)
+        print("")
+
+    print("WEEKDAY VERBOSE")
+    for i in weekdays:
+        i.print_verbose(i.date, i.day, i.night)
+        print("")
+
+    print("WEEKDAY BRIEF")
+    for i in weekdays:
+        i.print_brief(i.date, i.high, i.low, i.PoP_day, i.PoP_night, i.condition_day, i.condition_night)
+        print("")
+
 # BUGS:
 # none :)
