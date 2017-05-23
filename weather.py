@@ -208,9 +208,11 @@ def generate_hours():
         except IndexError:
             raw_gust.append("")
 
+    counter = 0
     for i in raw_LoP:
         if i == 'Nil':
-            i.replace("Nil", "No")
+            raw_LoP[counter] = "No"
+            counter+= 1
 
     counter = 0
     for i in raw_times:
