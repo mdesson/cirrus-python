@@ -7,7 +7,8 @@ hour_req = request.Request("https://weather.gc.ca/forecast/hourly/qc-147_metric_
 
 
 class WeekDay:
-    def __init__(self, date="TEMP", day="TEMP", night="TEMP", high="TEMP", low="TEMP", PoP_day="TEMP", PoP_night="TEMP", condition_day="TEMP", condition_night="TEMP"):
+    def __init__(self, date="TEMP", day="TEMP", night="TEMP", high="TEMP", low="TEMP", PoP_day="TEMP", PoP_night="TEMP",
+                 condition_day="TEMP", condition_night="TEMP"):
         self.date = date
         self.day = day
         self.night = night
@@ -222,10 +223,11 @@ def generate_hours():
 
     return hours_list
 
-weekdays = generate_weekdays()
-hours = generate_hours()
 
 if __name__ == "__main__":
+    weekdays = generate_weekdays()
+    hours = generate_hours()
+
     print("CURRENT WEATHER")
     current_weather()
 
