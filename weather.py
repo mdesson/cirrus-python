@@ -69,10 +69,10 @@ class Hour:
 
     def __repr__(self):
         if self.gust != "":
-            hour = "{}: {}°C. {}. {} PoP. Wind at {} km/h, gusts {} km/h.".format(self.time, self.temp, self.LoP,
+            hour = "{}: {}°C. {} LoP. {}. Wind at {} km/h, gusts {} km/h.".format(self.time, self.temp, self.LoP,
                                                                                   self.condition, self.wind, self.gust)
         else:
-            hour = "{}: {}°C. {}. {} PoP. Wind at {} km/h.".format(self.time, self.temp, self.LoP, self.condition,
+            hour = "{}: {}°C. {} LoP. {}. Wind at {} km/h.".format(self.time, self.temp, self.LoP, self.condition,
                                                                    self.wind)
 
         return hour
