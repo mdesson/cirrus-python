@@ -17,9 +17,17 @@ def incoming_sms():
     if body.lower() == 'c' or body.lower() == 'current':
         resp.message(current_weather())
     elif body.lower() == 'd' or body.lower() == 'day':
-        resp.message('SEND TODAY\'S HOURS')
+        weather = generate_hours()
+        hourly_report = ['HOURLY REPORT:']
+        for i in weather:
+            hourly_report.append(i.print_hour(i.time, i.temp, i.condition, i.LoP, i.wind, i.gust))
+        resp.message('\n\n'.join(hourly_report))
     elif body.lower() == 'w' or body.lower() == 'week':
-        resp.message('THE WEEK GOES HERE')
+        weather = generate_weekdays()
+        weekly_report = ['THIS WEEK:']
+        for i in weather:
+            weekly_report.append(i.print_brief(i.date, i.high, i.low, i.PoP_day, i.PoP_night, i.condition_day, i.condition_night))
+        resp.message('\n\n'.join(weekly_report))
     else:
         resp.message(
             '\nTo get the weather:\n1) Send \'c\' or \'current\' to get the current weather.\n2) Send \'d\' or \'day\' '

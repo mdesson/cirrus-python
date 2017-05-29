@@ -20,32 +20,37 @@ class WeekDay:
         self.condition_night = condition_night
 
     def print_verbose(self, date, day, night):
-        print(date.upper())
+        verbose = [date.upper()]
+
         if day != "TEMP" and night != "":
-            print("Day: {}".format(day))
-            print("Night: {}".format(night))
+            verbose.append("Day: {}".format(day))
+            verbose.append("Night: {}".format(night))
         elif day != "TEMP":
-            print("Day: {}".format(day))
+            verbose.append("Day: {}".format(day))
         elif night != "":
-            print("Night: {}".format(night))
+            verbose.append("Night: {}".format(night))
         else:
-            print("Error! No weather data for given date.")
+            verbose.append("Error! No weather data for given date.")
+
+        return '\n'.join(verbose)
 
     def print_brief(self, date, high, low, PoP_day, PoP_night, condition_day, condition_night):
-        print(date.upper())
+        brief = [date.upper()]
 
         if high != "TEMP":
-            print("{} high".format(high))
+            brief.append("{} high".format(high))
         if low != "TEMP":
-            print("{} low".format(low))
+            brief.append("{} low".format(low))
         if condition_day != "TEMP":
-            print("Day: {}".format(condition_day))
+            brief.append("Day: {}".format(condition_day))
         if PoP_day != "" and PoP_day != "TEMP":
-            print("{} chance of precipitation".format(PoP_day))
+            brief.append("{} chance of precipitation".format(PoP_day))
         if condition_night != "TEMP":
-            print("Night: {}".format(condition_night))
+            brief.append("Night: {}".format(condition_night))
         if PoP_night != "" and PoP_night != "TEMP":
-            print("{} chance of precipitation")
+            brief.append("{} chance of precipitation".format(PoP_night))
+
+        return '\n'.join(brief)
 
 
 class Hour:
@@ -59,12 +64,11 @@ class Hour:
 
     def print_hour(self, time, temp, LoP, condition, wind, gust):
         if gust != "":
-            print("{}: {}°C. {}. {} chance of precipitation. Wind at {} km/h, with gusts of {} km/h."
-                  .format(time, temp, LoP, condition, wind, gust))
+            hour = "{}: {}°C. {}. {} PoP. Wind at {} km/h, gusts {} km/h.".format(time, temp, LoP, condition, wind, gust)
         else:
-            print("{}: {}°C. {}. {} chance of precipitation. Wind at {} km/h."
-                  .format(time, temp, LoP, condition, wind))
+            hour = "{}: {}°C. {}. {} PoP. Wind at {} km/h.".format(time, temp, LoP, condition, wind)
 
+        return hour
 
 def make_soup(url):
     res = request.urlopen(url)
@@ -103,8 +107,8 @@ def current_weather():
     wind = current[11]
     humidity = current[10]
 
-    return str("\nIt is {} outside. The temperature is {} and {}. The wind is {} and humidity is at {}."
-          .format(conditions, temp, tendency, wind, humidity))
+    current = "It is {} outside. The temperature is {} and {}. The wind is {} and humidity is at {}.".format(conditions, temp, tendency, wind, humidity)
+    return current
 
 
 def generate_weekdays():
