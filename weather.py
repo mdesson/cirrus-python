@@ -7,6 +7,8 @@ hour_req = request.Request("https://weather.gc.ca/forecast/hourly/qc-147_metric_
 
 
 class WeekDay:
+    """WeekDay object contains weather data for a given day of the week.
+    TEMP placeholder will show when no data was scraped for that attribute."""
     def __init__(self, date="TEMP", day="TEMP", night="TEMP", high="TEMP", low="TEMP", PoP_day="TEMP", PoP_night="TEMP",
                  condition_day="TEMP", condition_night="TEMP"):
         self.date = date
@@ -19,8 +21,8 @@ class WeekDay:
         self.condition_day = condition_day
         self.condition_night = condition_night
 
-    # Returns string with weather in sentence form, directly from Environment Canada Website.
     def verbose_weather(self, date, day, night):
+        """Returns string with weather in sentence form, directly from Environment Canada Website"""
         verbose = [date.upper()]
 
         if day != "TEMP" and night != "":
@@ -55,6 +57,8 @@ class WeekDay:
 
 
 class Hour:
+    """Hour object contains weather data for a hour in the next 24 hours.
+    TEMP placeholder will show when no data was scraped for that attribute."""
     def __init__(self, time="TEMP", temp="TEMP", condition="TEMP", LoP="TEMP", wind="TEMP", gust="TEMP"):
         self.time = time
         self.temp = temp
@@ -75,21 +79,22 @@ class Hour:
 
 
 def make_soup(url):
+    """Generates soup object with given url."""
     res = request.urlopen(url)
     html = res.read()
     soup = BeautifulSoup(html, "lxml")
     return soup
 
 
-# returns list of elements with given tag and class
 def class_weatherlist(tag, webclass, url):
+    """Input a tag and webclass from the url's source to output a scraped list of of matching elements."""
     search = make_soup(url).find_all(tag, {"class": webclass})
     values = [x.get_text().replace('\n','') for x in search]
     return values
 
 
-# returns list of elements with given tag and header
 def header_weatherlist(tag, header, url):
+    """Input a tag and header from the url's source to output a scraped list of of matching elements."""
     search = make_soup(url).find_all(tag, {"headers": header})
     values = [x.get_text().replace('\n','') for x in search]
     return values
@@ -97,6 +102,8 @@ def header_weatherlist(tag, header, url):
 
 # For debug purposes to get all element in webclass
 def print_tag_list(existing_weatherlist):
+    """Prints all elements for given class_weatherlist or header_weatherlist with index number.
+    Mostly used for debug and building purposes."""
     x = 0
     for i in existing_weatherlist:
         print(str(x) + ' ' + i)
@@ -104,6 +111,7 @@ def print_tag_list(existing_weatherlist):
 
 
 def generate_weekdays():
+    """Generates a list of weekday objects for the next seven days."""
     raw_dates = class_weatherlist("td", "uniform_width", week_req)
     raw_days = class_weatherlist("tr", "pdg-btm-0", week_req)
     raw_nights = class_weatherlist("tr", "pdg-tp-0", week_req)
@@ -189,6 +197,7 @@ def generate_weekdays():
 
 
 def generate_hours():
+    """Generates a list of hour objects for the next 24 hours."""
     raw_times = header_weatherlist("td", "header1", hour_req)
     raw_temps = header_weatherlist("td", "header2", hour_req)
     raw_conds = header_weatherlist("td", "header3", hour_req)
@@ -221,6 +230,7 @@ def generate_hours():
 
 
 def current_weather():
+    """Returns a string describing the current weather."""
     current = class_weatherlist("dd", "mrgn-bttm-0", week_req)
 
     conditions = current[2].lower()
@@ -229,8 +239,7 @@ def current_weather():
     wind = current[11]
     humidity = current[10]
 
-    current = "It is {} outside. The temperature is {} and {}. The wind is {} and humidity is at {}.".format(conditions, temp, tendency, wind, humidity)
-    return current
+    return "It is {} outside. The temperature is {} and {}. The wind is {} and humidity is at {}.".format(conditions,temp, tendency, wind, humidity)
 
 
 if __name__ == "__main__":

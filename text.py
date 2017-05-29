@@ -5,7 +5,8 @@ from weather import *
 app = Flask(__name__)
 
 @app.route('/sms', methods=['GET', 'POST'])
-def incoming_sms():
+def cirrus():
+    '''Texts weather dependent on user input.'''
     body = REQUEST.values.get('Body', None)
     resp = MessagingResponse()
 
