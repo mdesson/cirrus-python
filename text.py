@@ -6,27 +6,22 @@ app = Flask(__name__)
 
 @app.route('/sms', methods=['GET', 'POST'])
 def incoming_sms():
-    '''Send a dynamic reply to an incoming text message'''
-    # Get the message the user sent our Twilio number
     body = REQUEST.values.get('Body', None)
-
-    # Start our TwiML response
     resp = MessagingResponse()
 
-    # Determine the right reply for this message
     if body.lower() == 'c' or body.lower() == 'current':
         resp.message(current_weather())
     elif body.lower() == 'd' or body.lower() == 'day':
         weather = generate_hours()
         hourly_report = ['HOURLY REPORT:']
         for i in weather:
-            hourly_report.append(i.print_hour(i.time, i.temp, i.condition, i.LoP, i.wind, i.gust))
+            hourly_report.append(repr(i))
         resp.message('\n\n'.join(hourly_report))
     elif body.lower() == 'w' or body.lower() == 'week':
         weather = generate_weekdays()
         weekly_report = ['THIS WEEK:']
         for i in weather:
-            weekly_report.append(i.print_brief(i.date, i.high, i.low, i.PoP_day, i.PoP_night, i.condition_day, i.condition_night))
+            weekly_report.append(repr(i))
         resp.message('\n\n'.join(weekly_report))
     else:
         resp.message(

@@ -254,6 +254,3 @@ if __name__ == "__main__":
     for i in weekdays:
         print(i)
         print("")
-
-# BUGS:
-# none :)
