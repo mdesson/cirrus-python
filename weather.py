@@ -103,7 +103,7 @@ def current_weather():
     wind = current[11]
     humidity = current[10]
 
-    print("It is {} outside. The temperature is {} and {}. The wind is {} and humidity is at {}."
+    return str("\nIt is {} outside. The temperature is {} and {}. The wind is {} and humidity is at {}."
           .format(conditions, temp, tendency, wind, humidity))
 
 
