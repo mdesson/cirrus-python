@@ -19,7 +19,8 @@ class WeekDay:
         self.condition_day = condition_day
         self.condition_night = condition_night
 
-    def print_verbose(self, date, day, night):
+    # Returns string with weather in sentence form, directly from Environment Canada Website.
+    def verbose_weather(self, date, day, night):
         verbose = [date.upper()]
 
         if day != "TEMP" and night != "":
@@ -34,21 +35,21 @@ class WeekDay:
 
         return '\n'.join(verbose)
 
-    def print_brief(self, date, high, low, PoP_day, PoP_night, condition_day, condition_night):
-        brief = [date.upper()]
+    def __repr__(self):
+        brief = [self.date.upper()]
 
-        if high != "TEMP":
-            brief.append("{} high".format(high))
-        if low != "TEMP":
-            brief.append("{} low".format(low))
-        if condition_day != "TEMP":
-            brief.append("Day: {}".format(condition_day))
-        if PoP_day != "" and PoP_day != "TEMP":
-            brief.append("{} chance of precipitation".format(PoP_day))
-        if condition_night != "TEMP":
-            brief.append("Night: {}".format(condition_night))
-        if PoP_night != "" and PoP_night != "TEMP":
-            brief.append("{} chance of precipitation".format(PoP_night))
+        if self.high != "TEMP":
+            brief.append("{} high".format(self.high))
+        if self.low != "TEMP":
+            brief.append("{} low".format(self.low))
+        if self.condition_day != "TEMP":
+            brief.append("Day: {}".format(self.condition_day))
+        if self.PoP_day != "" and self.PoP_day != "TEMP":
+            brief.append("{} chance of precipitation".format(self.PoP_day))
+        if self.condition_night != "TEMP":
+            brief.append("Night: {}".format(self.condition_night))
+        if self.PoP_night != "" and self.PoP_night != "TEMP":
+            brief.append("{} chance of precipitation".format(self.PoP_night))
 
         return '\n'.join(brief)
 
@@ -62,13 +63,16 @@ class Hour:
         self.wind = wind
         self.gust = gust
 
-    def print_hour(self, time, temp, LoP, condition, wind, gust):
-        if gust != "":
-            hour = "{}: {}°C. {}. {} PoP. Wind at {} km/h, gusts {} km/h.".format(time, temp, LoP, condition, wind, gust)
+    def __repr__(self):
+        if self.gust != "":
+            hour = "{}: {}°C. {}. {} PoP. Wind at {} km/h, gusts {} km/h.".format(self.time, self.temp, self.LoP,
+                                                                                  self.condition, self.wind, self.gust)
         else:
-            hour = "{}: {}°C. {}. {} PoP. Wind at {} km/h.".format(time, temp, LoP, condition, wind)
+            hour = "{}: {}°C. {}. {} PoP. Wind at {} km/h.".format(self.time, self.temp, self.LoP, self.condition,
+                                                                   self.wind)
 
         return hour
+
 
 def make_soup(url):
     res = request.urlopen(url)
@@ -84,31 +88,19 @@ def class_weatherlist(tag, webclass, url):
     return values
 
 
+# returns list of elements with given tag and header
 def header_weatherlist(tag, header, url):
     search = make_soup(url).find_all(tag, {"headers": header})
     values = [x.get_text().replace('\n','') for x in search]
     return values
 
 
-# For debug purposes to get all element in webclass. ==> REWRITE
+# For debug purposes to get all element in webclass
 def print_tag_list(existing_weatherlist):
     x = 0
     for i in existing_weatherlist:
         print(str(x) + ' ' + i)
         x += 1
-
-
-def current_weather():
-    current = class_weatherlist("dd", "mrgn-bttm-0", week_req)
-
-    conditions = current[2].lower()
-    tendency = current[5].lower()
-    temp = current[6]
-    wind = current[11]
-    humidity = current[10]
-
-    current = "It is {} outside. The temperature is {} and {}. The wind is {} and humidity is at {}.".format(conditions, temp, tendency, wind, humidity)
-    return current
 
 
 def generate_weekdays():
@@ -228,6 +220,19 @@ def generate_hours():
     return hours_list
 
 
+def current_weather():
+    current = class_weatherlist("dd", "mrgn-bttm-0", week_req)
+
+    conditions = current[2].lower()
+    tendency = current[5].lower()
+    temp = current[6]
+    wind = current[11]
+    humidity = current[10]
+
+    current = "It is {} outside. The temperature is {} and {}. The wind is {} and humidity is at {}.".format(conditions, temp, tendency, wind, humidity)
+    return current
+
+
 if __name__ == "__main__":
     weekdays = generate_weekdays()
     hours = generate_hours()
@@ -237,17 +242,17 @@ if __name__ == "__main__":
 
     print("\nHOURLY REPORT")
     for i in hours:
-        i.print_hour(i.time, i.temp, i.condition, i.LoP, i.wind, i.gust)
+        print(i)
         print("")
 
     print("WEEKDAY VERBOSE")
     for i in weekdays:
-        i.print_verbose(i.date, i.day, i.night)
+        print(i.verbose_weather(i.date, i.day, i.night))
         print("")
 
     print("WEEKDAY BRIEF")
     for i in weekdays:
-        i.print_brief(i.date, i.high, i.low, i.PoP_day, i.PoP_night, i.condition_day, i.condition_night)
+        print(i)
         print("")
 
 # BUGS:
