@@ -18,10 +18,9 @@ def cirrus():
         hourly_report = ['HOURLY REPORT:']
         for i in weather:
             hourly_report.append(repr(i))
-        resp.message('\n\n'.join(hourly_report))
 
         if len('\n\n'.join(hourly_report)) < 1600:
-            return '\n\n'.join(hourly_report)
+            resp.message('\n\n'.join(hourly_report))
         else:
             if len(hourly_report) % 2 == 0:
                 part_one = '\n\n'.join(hourly_report[0:int(len(hourly_report)/2-0.5)])
