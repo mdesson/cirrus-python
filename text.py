@@ -19,7 +19,7 @@ def cirrus():
         for i in weather:
             hourly_report.append(repr(i))
 
-        if len('\n\n'.join(hourly_report)) < 1600:
+        if len('\n\n'.join(hourly_report))+38 < 1600: # 38 characters to offset "Sent from your Twilio trial account - "
             resp.message('\n\n'.join(hourly_report))
         else:
             if len(hourly_report) % 2 == 0:
@@ -28,8 +28,8 @@ def cirrus():
                 resp.message(part_one)
                 resp.message(part_two)
             else:
-                part_one = '\n\n'.join(hourly_report[0:len(hourly_report)/2])
-                part_two = '\n\n'.join(hourly_report[len(hourly_report)/2+1:len(hourly_report)-1])
+                part_one = '\n\n'.join(hourly_report[0:int(len(hourly_report)/2)])
+                part_two = '\n\n'.join(hourly_report[int(len(hourly_report)/2+1):int(len(hourly_report))-1])
                 resp.message(part_one)
                 resp.message(part_two)
 
@@ -44,6 +44,8 @@ def cirrus():
         resp.message(
             '\nTo get the weather:\n1) Send \'c\' or \'current\' to get the current weather.\n2) Send \'d\' or \'day\' '
             'to get the next 24 hours.\n3) Send \'w\' or \'week\' to get the next seven days.')
+
+    return str(resp)
 
 
 if __name__ == '__main__':
