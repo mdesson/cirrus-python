@@ -5,7 +5,6 @@ headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/
 week_req = request.Request("https://weather.gc.ca/city/pages/qc-147_metric_e.html", headers=headers)
 hour_req = request.Request("https://weather.gc.ca/forecast/hourly/qc-147_metric_e.html", headers=headers)
 
-
 class WeekDay:
     """WeekDay object contains weather data for a given day of the week.
     TEMP placeholder will show when no data was scraped for that attribute."""

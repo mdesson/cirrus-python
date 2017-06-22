@@ -22,16 +22,10 @@ def cirrus():
         if len('\n\n'.join(hourly_report))+38 < 1600: # 38 characters to offset "Sent from your Twilio trial account - "
             resp.message('\n\n'.join(hourly_report))
         else:
-            if len(hourly_report) % 2 == 0:
-                part_one = '\n\n'.join(hourly_report[0:int(len(hourly_report)/2-0.5)])
-                part_two = '\n\n'.join(hourly_report[int(len(hourly_report)/2+0.5):int(len(hourly_report)-1)])
-                resp.message(part_one)
-                resp.message(part_two)
-            else:
-                part_one = '\n\n'.join(hourly_report[0:int(len(hourly_report)/2)])
-                part_two = '\n\n'.join(hourly_report[int(len(hourly_report)/2+1):int(len(hourly_report))-1])
-                resp.message(part_one)
-                resp.message(part_two)
+            part_one = '\n\n'.join(hourly_report[0:int(len(hourly_report) / 2 + 1)])
+            part_two = '\n\n'.join(hourly_report[int(len(hourly_report) / 2 + 1):int(len(hourly_report) - 1)])
+            resp.message(part_one)
+            resp.message(part_two)
 
     elif body.lower() == 'w' or body.lower() == 'week':
         weather = generate_weekdays()
