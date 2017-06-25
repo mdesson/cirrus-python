@@ -39,18 +39,19 @@ def morning_message():
 
 def get_next_7am():
     """Determines (roughly) the total number seconds until it will next be 7:00am."""
+    now = datetime.datetime.now()
     if now.minute != 0:
         hour = 24 - datetime.datetime.now().hour + 6  # returns int of hours until 6th hour
         minute = now.minute
         second = now.second
-        countdown = datetime.timedelta(hours=hour, minutes=minute, seconds=second)
-        return countdown
+        countdown = datetime.timedelta(hours=hour, minutes=minute, seconds=second).total_seconds()
+        return int(countdown)
     else:
         hour = 24 - now.hour + 7  # returns int of hours until 7th hour
         minute = now.minute
         second = now.second
-        countdown = datetime.timedelta(hours=hour, minutes=minute, seconds=second)
-        return countdown
+        countdown = datetime.timedelta(hours=hour, minutes=minute, seconds=second).total_seconds()
+        return int(countdown)
 
 
 def scheduler():
@@ -65,4 +66,5 @@ def scheduler():
 
 
 if __name__ == '__main__':
+    get_next_7am()
     scheduler()
