@@ -1,6 +1,8 @@
+from sys import exit
 from flask import Flask, request as REQUEST, redirect
 from twilio.twiml.messaging_response import MessagingResponse
 from weather import *
+from scheduler import scheduler
 
 app = Flask(__name__)
 
@@ -34,10 +36,15 @@ def cirrus():
             weekly_report.append(repr(i))
         resp.message('\n\n'.join(weekly_report))
 
+    elif body.lower() == 'e' or body.lower() == 'exit':
+        resp.message("Ending program. Goodbye1")
+        exit()
+
     else:
         resp.message(
             '\nTo get the weather:\n1) Send \'c\' or \'current\' to get the current weather.\n2) Send \'d\' or \'day\' '
-            'to get the next 24 hours.\n3) Send \'w\' or \'week\' to get the next seven days.')
+            'to get the next 24 hours.\n3) Send \'w\' or \'week\' to get the next seven days.\n4) \'e\' or \'exit\' to '
+            'exit.)
 
     return str(resp)
 
