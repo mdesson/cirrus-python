@@ -62,3 +62,7 @@ def scheduler():
     while True:
         time.sleep(86400)  # Number of seconds in 24 hours
         morning_message()
+
+
+if __name__ == '__main__':
+    scheduler()
