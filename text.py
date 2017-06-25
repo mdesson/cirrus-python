@@ -1,9 +1,12 @@
-from sys import exit
+import threading
 from flask import Flask, request as REQUEST, redirect
 from twilio.twiml.messaging_response import MessagingResponse
 from weather import *
 from scheduler import scheduler
 
+# Runs scheduler() to text weather every 24h at 7:00am.
+threadObj = threading.Thread(target=scheduler, daemon=True)
+threadObj.start()
 
 app = Flask(__name__)
 
