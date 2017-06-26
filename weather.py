@@ -20,22 +20,6 @@ class WeekDay:
         self.condition_day = condition_day
         self.condition_night = condition_night
 
-    def verbose_weather(self, date, day, night):
-        """Returns string with weather in sentence form, directly from Environment Canada Website"""
-        verbose = [date.upper()]
-
-        if day != "TEMP" and night != "":
-            verbose.append("Day: {}".format(day))
-            verbose.append("Night: {}".format(night))
-        elif day != "TEMP":
-            verbose.append("Day: {}".format(day))
-        elif night != "":
-            verbose.append("Night: {}".format(night))
-        else:
-            verbose.append("Error! No weather data for given date.")
-
-        return '\n'.join(verbose)
-
     def __repr__(self):
         brief = [self.date.upper()]
 

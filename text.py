@@ -1,5 +1,5 @@
 import threading
-from flask import Flask, request as REQUEST, redirect
+from flask import Flask, request as REQUEST
 from twilio.twiml.messaging_response import MessagingResponse
 from weather import *
 from scheduler import scheduler
@@ -69,4 +69,4 @@ def cirrus():
 
 if __name__ == '__main__':
     current_weather()
-    app.run(debug=True)
+    app.run(debug=False)
