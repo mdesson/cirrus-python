@@ -237,11 +237,6 @@ if __name__ == "__main__":
         print(i)
         print("")
 
-    print("WEEKDAY VERBOSE")
-    for i in weekdays:
-        print(i.verbose_weather(i.date, i.day, i.night))
-        print("")
-
     print("WEEKDAY BRIEF")
     for i in weekdays:
         print(i)
