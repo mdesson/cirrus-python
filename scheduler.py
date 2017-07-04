@@ -44,13 +44,16 @@ def get_next_7am():
         hour = 24 - datetime.datetime.now().hour + 6  # returns int of hours until 6th hour
         minute = now.minute
         second = now.second
-        countdown = datetime.timedelta(hours=hour, minutes=minute, seconds=second).total_seconds()
-        return int(countdown)
+        # countdown = datetime.timedelta(hours=hour, minutes=minute, seconds=second).total_seconds()
+        # return int(countdown)
+        countdown = datetime.timedelta(hours=hour, minutes=60-minute, seconds=60-second)
+        return countdown
+
     else:
         hour = 24 - now.hour + 7  # returns int of hours until 7th hour
         minute = now.minute
         second = now.second
-        countdown = datetime.timedelta(hours=hour, minutes=minute, seconds=second).total_seconds()
+        countdown = datetime.timedelta(hours=hour, minutes=60-minute, seconds=60-second).total_seconds()
         return int(countdown)
 
 
@@ -61,7 +64,8 @@ def scheduler():
     morning_message()
 
     while True:
-        time.sleep(86400)  # Number of seconds in 24 hours
+        for i in range(86400): # Number of seconds in 24 hours
+            time.sleep(1)
         morning_message()
 
 
