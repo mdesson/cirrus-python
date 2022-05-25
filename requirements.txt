@@ -10,7 +10,7 @@ Jinja2==2.9.6
 lxml==3.7.3
 MarkupSafe==1.0
 packaging==16.8
-PyJWT==1.5.0
+PyJWT==2.4.0
 pyparsing==2.2.0
 PySocks==1.6.7
 pytz==2017.2
